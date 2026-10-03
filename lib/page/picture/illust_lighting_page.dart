@@ -25,6 +25,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:pixez/component/ban_page.dart';
 import 'package:pixez/component/common_back_area.dart';
 import 'package:pixez/component/detail_jump_button.dart';
+import 'package:pixez/component/fold_button.dart';
 import 'package:pixez/component/null_hero.dart';
 import 'package:pixez/component/painter_avatar.dart';
 import 'package:pixez/component/pixez_default_header.dart';
@@ -433,10 +434,11 @@ class _IllustVerticalPageState extends State<IllustVerticalPage>
   final _foldButtonKey = GlobalKey();
 
   Widget _buildFoldButton(Illusts data) {
-    return InkWell(
+    return FoldButton(
       key: _foldButtonKey,
-      onTap: () {
-        HapticUtil.selectionClick();
+      folded: _folded,
+      remainingPages: data.metaPages.length - 1,
+      onToggle: () {
         final buttonContext = _foldButtonKey.currentContext;
         final wasFolded = _folded;
         setState(() => _folded = !_folded);
@@ -451,26 +453,6 @@ class _IllustVerticalPageState extends State<IllustVerticalPage>
           });
         }
       },
-      child: Container(
-        height: 48,
-        color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              _folded ? Icons.expand_more : Icons.expand_less,
-              size: 20,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              _folded
-                  ? I18n.of(context).expand_remaining_pages(
-                      data.metaPages.length - 1)
-                  : I18n.of(context).collapse_pages,
-            ),
-          ],
-        ),
-      ),
     );
   }
 
